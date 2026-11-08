@@ -1,0 +1,32 @@
+name: textile_balancer_flutter
+description: Équilibrage de lignes de production textile/habillement (ALBP) — version Flutter (Web / Android / Windows).
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  http: ^1.2.2
+  file_picker: ^8.1.6
+  csv: ^6.0.0
+  excel: ^4.0.6
+  path_provider: ^2.1.5
+  open_file: ^3.5.1
+  provider: ^6.1.5
+  fl_chart: ^0.70.2
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/

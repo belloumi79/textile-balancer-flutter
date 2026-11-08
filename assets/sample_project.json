@@ -1,0 +1,247 @@
+{
+  "nodes": [
+    {
+      "id": "op1",
+      "type": "operation",
+      "enabled": true,
+      "config": {
+        "op_id": "OP010",
+        "name": "Préparation pièces",
+        "duration": 0.45,
+        "predecessors": "",
+        "machine_type": "table_travail",
+        "skills": "lecture_plan",
+        "section": "Montage",
+        "task_type": "VA",
+        "optional": false
+      }
+    },
+    {
+      "id": "op2",
+      "type": "operation",
+      "enabled": true,
+      "config": {
+        "op_id": "OP020",
+        "name": "Montage épaule",
+        "duration": 0.55,
+        "predecessors": "OP010",
+        "machine_type": "piqueuse_plate",
+        "skills": "couture_droite",
+        "section": "Montage",
+        "task_type": "VA",
+        "optional": false
+      }
+    },
+    {
+      "id": "op3",
+      "type": "operation",
+      "enabled": true,
+      "config": {
+        "op_id": "OP030",
+        "name": "Montage côtés",
+        "duration": 0.65,
+        "predecessors": "OP020",
+        "machine_type": "piqueuse_plate",
+        "skills": "couture_droite",
+        "section": "Montage",
+        "task_type": "VA",
+        "optional": false
+      }
+    },
+    {
+      "id": "op4",
+      "type": "operation",
+      "enabled": true,
+      "config": {
+        "op_id": "OP040",
+        "name": "Pose col",
+        "duration": 0.85,
+        "predecessors": "OP030",
+        "machine_type": "piqueuse_plate",
+        "skills": "couture_droite",
+        "section": "Montage",
+        "task_type": "VA",
+        "optional": false
+      }
+    },
+    {
+      "id": "op5",
+      "type": "operation",
+      "enabled": true,
+      "config": {
+        "op_id": "OP050",
+        "name": "Surjet côtés",
+        "duration": 0.40,
+        "predecessors": "OP030",
+        "machine_type": "surjeteuse_5_fils",
+        "skills": "surjet_5_fils",
+        "section": "Montage",
+        "task_type": "VA",
+        "optional": false
+      }
+    },
+    {
+      "id": "op6",
+      "type": "operation",
+      "enabled": true,
+      "config": {
+        "op_id": "OP060",
+        "name": "Ourlet bas",
+        "duration": 0.55,
+        "predecessors": "OP050",
+        "machine_type": "surjeteuse_5_fils",
+        "skills": "surjet_5_fils",
+        "section": "Finitions",
+        "task_type": "VA",
+        "optional": false
+      }
+    },
+    {
+      "id": "op7",
+      "type": "operation",
+      "enabled": true,
+      "config": {
+        "op_id": "OP070",
+        "name": "Piquage boutons",
+        "duration": 0.35,
+        "predecessors": "OP040",
+        "machine_type": "piqueuse_bouton",
+        "skills": "piquage_bouton",
+        "section": "Finitions",
+        "task_type": "VA",
+        "optional": false
+      }
+    },
+    {
+      "id": "op8",
+      "type": "operation",
+      "enabled": true,
+      "config": {
+        "op_id": "OP080",
+        "name": "Pose boutonnières",
+        "duration": 0.45,
+        "predecessors": "OP070",
+        "machine_type": "boutonniere",
+        "skills": "boutonniere",
+        "section": "Finitions",
+        "task_type": "VA",
+        "optional": false
+      }
+    },
+    {
+      "id": "ws1",
+      "type": "workstation",
+      "enabled": true,
+      "config": {
+        "ws_id": "WS01",
+        "name": "Poste préparation",
+        "machine_type": "table_travail",
+        "available": true,
+        "max_workers": 1,
+        "section": "Montage"
+      }
+    },
+    {
+      "id": "ws2",
+      "type": "workstation",
+      "enabled": true,
+      "config": {
+        "ws_id": "WS02",
+        "name": "Piqueuse plate 1",
+        "machine_type": "piqueuse_plate",
+        "available": true,
+        "max_workers": 1,
+        "section": "Montage"
+      }
+    },
+    {
+      "id": "ws3",
+      "type": "workstation",
+      "enabled": true,
+      "config": {
+        "ws_id": "WS03",
+        "name": "Piqueuse plate 2",
+        "machine_type": "piqueuse_plate",
+        "available": true,
+        "max_workers": 1,
+        "section": "Montage"
+      }
+    },
+    {
+      "id": "ws4",
+      "type": "workstation",
+      "enabled": true,
+      "config": {
+        "ws_id": "WS04",
+        "name": "Surjeteuse 5 fils",
+        "machine_type": "surjeteuse_5_fils",
+        "available": true,
+        "max_workers": 1,
+        "section": "Montage"
+      }
+    },
+    {
+      "id": "ws5",
+      "type": "workstation",
+      "enabled": true,
+      "config": {
+        "ws_id": "WS05",
+        "name": "Piqueuse bouton",
+        "machine_type": "piqueuse_bouton",
+        "available": true,
+        "max_workers": 1,
+        "section": "Finitions"
+      }
+    },
+    {
+      "id": "ws6",
+      "type": "workstation",
+      "enabled": true,
+      "config": {
+        "ws_id": "WS06",
+        "name": "Boutonnière",
+        "machine_type": "boutonniere",
+        "available": true,
+        "max_workers": 1,
+        "section": "Finitions"
+      }
+    },
+    {
+      "id": "wk1",
+      "type": "worker",
+      "enabled": true,
+      "config": {
+        "worker_id": "W001",
+        "name": "Marie D.",
+        "skills": "lecture_plan,couture_droite",
+        "efficiency": 1.0,
+        "available": true
+      }
+    },
+    {
+      "id": "wk2",
+      "type": "worker",
+      "enabled": true,
+      "config": {
+        "worker_id": "W002",
+        "name": "Ahmed B.",
+        "skills": "couture_droite,surjet_5_fils",
+        "efficiency": 1.05,
+        "available": true
+      }
+    },
+    {
+      "id": "wk3",
+      "type": "worker",
+      "enabled": true,
+      "config": {
+        "worker_id": "W003",
+        "name": "Fatou S.",
+        "skills": "surjet_5_fils,piquage_bouton,boutonniere",
+        "efficiency": 1.0,
+        "available": true
+      }
+    }
+  ],
+  "edges": []
+}
