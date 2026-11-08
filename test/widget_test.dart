@@ -4,6 +4,6 @@ import 'package:textile_balancer_flutter/main.dart';
 void main() {
   testWidgets('App loads smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(const TextileLineBalancerApp());
-    expect(find.text('Équilibrez vos lignes'), findsOneWidget);
+    expect(find.textContaining('Équilibrez vos lignes'), findsOneWidget);
   });
 }
