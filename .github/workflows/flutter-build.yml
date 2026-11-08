@@ -3,26 +3,18 @@ name: Build & Deploy Textile Line Balancer Flutter
 on:
   push:
     branches: [main, master]
-    paths:
-      - 'textile-balancer-flutter/**'
   pull_request:
     branches: [main, master]
-    paths:
-      - 'textile-balancer-flutter/**'
   workflow_dispatch:
 
 env:
   FLUTTER_VERSION: '3.41.4'
   FLUTTER_CHANNEL: 'stable'
-  WORKING_DIR: 'textile-balancer-flutter'
 
 jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ env.WORKING_DIR }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -38,9 +30,6 @@ jobs:
   test:
     name: Tests
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ env.WORKING_DIR }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -57,9 +46,6 @@ jobs:
     name: Build Linux
     runs-on: ubuntu-latest
     needs: [analyze, test]
-    defaults:
-      run:
-        working-directory: ${{ env.WORKING_DIR }}
     steps:
       - uses: actions/checkout@v4
       - name: Install Linux dependencies
@@ -89,9 +75,6 @@ jobs:
     name: Build Windows
     runs-on: windows-latest
     needs: [analyze, test]
-    defaults:
-      run:
-        working-directory: ${{ env.WORKING_DIR }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -115,9 +98,6 @@ jobs:
     name: Build Web
     runs-on: ubuntu-latest
     needs: [analyze, test]
-    defaults:
-      run:
-        working-directory: ${{ env.WORKING_DIR }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -157,7 +137,6 @@ jobs:
           directory: build/web
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           branch: main
-          # Or use wrangler directly:
       - name: Alternative deploy with Wrangler
         if: always()
         run: |
