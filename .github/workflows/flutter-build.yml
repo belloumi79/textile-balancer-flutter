@@ -84,7 +84,7 @@ jobs:
           cache: true
       - name: Setup and Build Windows
         run: |
-          flutter config --enable-windows-desktop
+          flutter create --platforms=windows .
           flutter pub get
           flutter build windows --release
       - name: Upload Windows artifact
