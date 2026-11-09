@@ -1,55 +1,55 @@
 /// Global application state matching the web dashboard.
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'api.dart';
 import 'models.dart';
+import 'api.dart';
 
 class AppState extends ChangeNotifier {
   final ApiClient _api = ApiClient();
 
   // ── Auth ──────────────────────────────────────────────────────────
   String? _accessToken;
-  User? _currentUser;
+  dynamic _currentUser;
   bool _isSuperAdmin = false;
 
   String? get accessToken => _accessToken;
-  User? get currentUser => _currentUser;
+  dynamic get currentUser => _currentUser;
   bool get isAuthenticated => _accessToken != null;
   bool get isSuperAdmin => _isSuperAdmin;
 
   // ── Organizations ─────────────────────────────────────────────────
-  List<Organization> _organizations = [];
-  Organization? _selectedOrg;
+  List<dynamic> _organizations = [];
+  dynamic _selectedOrg;
 
-  List<Organization> get organizations => _organizations;
-  Organization? get selectedOrg => _selectedOrg;
+  List<dynamic> get organizations => _organizations;
+  dynamic get selectedOrg => _selectedOrg;
 
   // ── Production Lines ──────────────────────────────────────────────
-  List<ProductionLine> _productionLines = [];
+  List<dynamic> _productionLines = [];
   bool _linesLoading = false;
 
-  List<ProductionLine> get productionLines => _productionLines;
+  List<dynamic> get productionLines => _productionLines;
   bool get linesLoading => _linesLoading;
 
   // ── Runs / Calculations History ───────────────────────────────────
-  List<RunSummary> _runs = [];
+  List<dynamic> _runs = [];
   bool _runsLoading = false;
 
-  List<RunSummary> get runs => _runs;
+  List<dynamic> get runs => _runs;
   bool get runsLoading => _runsLoading;
 
   // ── Problems ──────────────────────────────────────────────────────
-  List<ProblemSummary> _problems = [];
+  List<dynamic> _problems = [];
   bool _problemsLoading = false;
 
-  List<ProblemSummary> get problems => _problems;
+  List<dynamic> get problems => _problems;
   bool get problemsLoading => _problemsLoading;
 
   // ── Workshop Plans ────────────────────────────────────────────────
-  List<WorkshopPlan> _workshopPlans = [];
+  List<dynamic> _workshopPlans = [];
   bool _plansLoading = false;
 
-  List<WorkshopPlan> get workshopPlans => _workshopPlans;
+  List<dynamic> get workshopPlans => _workshopPlans;
   bool get plansLoading => _plansLoading;
 
   // ── UI State ──────────────────────────────────────────────────────
@@ -59,13 +59,13 @@ class AppState extends ChangeNotifier {
   int get selectedTabIndex => _selectedTabIndex;
   bool get sidebarCollapsed => _sidebarCollapsed;
 
-  // ── Balance/Scenarios (legacy - for standalone balance tab) ────────
-  ProjectData? projectData;
+  // ── Balance/Scenarios (legacy - standalone balance tab) ────────────
+  Map<String, dynamic>? projectData;
   double cycleTime = 1.5;
   String solver = 'rpw';
   String objective = 'min_stations';
   int timeLimit = 30;
-  BalanceResult? balanceResult;
+  Map<String, dynamic>? balanceResult;
   bool balanceLoading = false;
   String? balanceError;
 
@@ -128,7 +128,7 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  void selectOrg(Organization org) {
+  void selectOrg(dynamic org) {
     _selectedOrg = org;
     _loadDashboardData();
     notifyListeners();
@@ -168,7 +168,7 @@ class AppState extends ChangeNotifier {
     } catch (e) {
       debugPrint('Load runs error: $e');
     } finally {
-      _runsLoading = false;
+      _linesLoading = false;
       notifyListeners();
     }
   }
@@ -202,7 +202,7 @@ class AppState extends ChangeNotifier {
   }
 
   // ── Production Line Actions ──────────────────────────────────────
-  Future<void> addProductionLine(ProductionLine line) async {
+  Future<void> addProductionLine(dynamic line) async {
     if (_selectedOrg == null) return;
     try {
       final created = await _api.createProductionLine(_selectedOrg!.id, line);
@@ -228,18 +228,11 @@ class AppState extends ChangeNotifier {
 
   Future<void> runBalanceForLine(String lineId) async {
     if (_selectedOrg == null) return;
-    // Need a problem_id for the line - find or create one
-    // For now just trigger via run endpoint
     debugPrint('Run balance for line: $lineId');
   }
 
-  // Alias for dashboard compatibility
-  Future<void> runCalculationForLine(String lineId) async {
-    return runBalanceForLine(lineId);
-  }
-
   // ── Problems ──────────────────────────────────────────────────────
-  Future<void> createProblem(ProblemRequest request) async {
+  Future<void> createProblem(dynamic request) async {
     if (_selectedOrg == null) return;
     try {
       final created = await _api.createProblem(_selectedOrg!.id, request);
@@ -252,7 +245,7 @@ class AppState extends ChangeNotifier {
   }
 
   // ── Workshop Plans ────────────────────────────────────────────────
-  Future<void> addWorkshopPlan(WorkshopPlan plan) async {
+  Future<void> addWorkshopPlan(dynamic plan) async {
     if (_selectedOrg == null) return;
     try {
       final created = await _api.getWorkshopPlan(_selectedOrg!.id, plan.id);
@@ -271,8 +264,6 @@ class AppState extends ChangeNotifier {
     balanceError = null;
     notifyListeners();
     try {
-      // Use the new async job API
-      // For legacy tab, we'd need to create a problem first
       debugPrint('Legacy runBalance called - use new API instead');
       balanceLoading = false;
     } catch (e) {
