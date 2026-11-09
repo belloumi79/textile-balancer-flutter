@@ -82,6 +82,8 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: ${{ env.FLUTTER_CHANNEL }}
           cache: true
+      - name: Enable Windows desktop
+        run: flutter config --enable-windows-desktop
       - name: Get dependencies
         run: flutter pub get
       - name: Build Windows release
@@ -128,17 +130,7 @@ jobs:
         with:
           name: textile-balancer-web-${{ github.run_id }}
           path: build/web
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: textile-line-balancer
-          directory: build/web
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-      - name: Alternative deploy with Wrangler
-        if: always()
+      - name: Deploy to Cloudflare Pages with Wrangler
         run: |
           npm install -g wrangler
           wrangler pages deploy build/web \
