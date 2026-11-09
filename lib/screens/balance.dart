@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models.dart';
 import '../state.dart';
 import '../widgets/results_view.dart';
 

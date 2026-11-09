@@ -32,10 +32,10 @@ class AppState extends ChangeNotifier {
   bool get linesLoading => _linesLoading;
 
   // ── Runs / Calculations History ───────────────────────────────────
-  List<dynamic> _runs = [];
+  List<RunSummary> _runs = [];
   bool _runsLoading = false;
 
-  List<dynamic> get runs => _runs;
+  List<RunSummary> get runs => _runs;
   bool get runsLoading => _runsLoading;
 
   // ── Problems ──────────────────────────────────────────────────────
@@ -60,12 +60,12 @@ class AppState extends ChangeNotifier {
   bool get sidebarCollapsed => _sidebarCollapsed;
 
   // ── Balance/Scenarios (legacy - standalone balance tab) ────────────
-  Map<String, dynamic>? projectData;
+  ProjectData? projectData;
   double cycleTime = 1.5;
   String solver = 'rpw';
   String objective = 'min_stations';
   int timeLimit = 30;
-  Map<String, dynamic>? balanceResult;
+  BalanceResult? balanceResult;
   bool balanceLoading = false;
   String? balanceError;
 
@@ -202,7 +202,7 @@ class AppState extends ChangeNotifier {
   }
 
   // ── Production Line Actions ──────────────────────────────────────
-  Future<void> addProductionLine(dynamic line) async {
+  Future<void> addProductionLine(ProductionLine line) async {
     if (_selectedOrg == null) return;
     try {
       final created = await _api.createProductionLine(_selectedOrg!.id, line);
@@ -226,9 +226,9 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  Future<void> runBalanceForLine(String lineId) async {
+  Future<void> runCalculationForLine(String lineId) async {
     if (_selectedOrg == null) return;
-    debugPrint('Run balance for line: $lineId');
+    debugPrint('Run calculation for line: $lineId');
   }
 
   // ── Problems ──────────────────────────────────────────────────────

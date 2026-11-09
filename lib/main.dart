@@ -1,12 +1,16 @@
 /// Textile Line Balancer - Flutter App matching the web dashboard UI
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'api.dart';
 import 'state.dart';
 import 'screens/login_screen.dart';
 import 'screens/dashboard_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await ApiClient.initialize();
   runApp(const TextileLineBalancerApp());
 }
 

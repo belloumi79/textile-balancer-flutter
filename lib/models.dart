@@ -1,8 +1,12 @@
-/// Legacy models for standalone balance tab (api/v1/balance/direct etc.).
+/// Modèles de l'application Textile Line Balancer (legacy + dashboard).
+import 'package:flutter/material.dart';
+
+// ── Legacy models (standalone balance tab) ─────────────────────────
+
 class Operation {
   final String id;
   final String name;
-  double duration;
+  final double duration;
   final List<String> predecessors;
   final String machineType;
   final List<String> requiredSkills;
@@ -158,7 +162,7 @@ class BalanceResult {
     this.stationDetails = const [],
     this.operationAssignments = const {},
     this.recommendations = const [],
-  );
+  });
 
   factory BalanceResult.fromApi(Map<String, dynamic> json) => BalanceResult(
         success: json['success'] ?? false,
@@ -255,18 +259,6 @@ class User {
       );
 }
 
-class AuthResponse {
-  final String accessToken;
-  final User user;
-
-  AuthResponse({required this.accessToken, required this.user});
-
-  factory AuthResponse.fromApi(Map<String, dynamic> json) => AuthResponse(
-        accessToken: json['access_token'] ?? '',
-        user: User.fromApi(json['user'] ?? {}),
-      );
-}
-
 class Organization {
   final String id;
   final String name;
@@ -274,14 +266,22 @@ class Organization {
   final DateTime createdAt;
   final Subscription? subscription;
 
-  Organization({required this.id, required this.name, required this.country, required this.createdAt, this.subscription});
+  Organization({
+    required this.id,
+    required this.name,
+    required this.country,
+    required this.createdAt,
+    this.subscription,
+  });
 
   factory Organization.fromApi(Map<String, dynamic> json) => Organization(
         id: json['id'] ?? '',
         name: json['name'] ?? '',
         country: json['country'] ?? '',
         createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
-        subscription: json['subscription'] != null ? Subscription.fromApi(json['subscription']) : null,
+        subscription: json['subscription'] != null
+            ? Subscription.fromApi(json['subscription'])
+            : null,
       );
 }
 
@@ -297,7 +297,7 @@ class Subscription {
       );
 }
 
-/// Modèles de production.
+// ── Production models ──────────────────────────────────────────────
 
 class ProductionLine {
   final String id;
@@ -318,7 +318,7 @@ class ProductionLine {
     required this.createdBy,
     required this.createdAt,
     required this.updatedAt,
-  );
+  });
 
   factory ProductionLine.fromApi(Map<String, dynamic> json) => ProductionLine(
         id: json['id'] ?? '',
@@ -338,13 +338,13 @@ class ProductionLine {
       };
 }
 
-/// Modèles de calculs.
+// ── Calculation models ─────────────────────────────────────────────
 
 class RunSummary {
   final String id;
   final String orgId;
   final String? problemId;
-  final String kind; // 'balance' | 'min_cycle'
+  final String kind;
   final String solver;
   final String status;
   final bool success;
@@ -373,7 +373,7 @@ class RunSummary {
     required this.error,
     required this.createdAt,
     this.finishedAt,
-  );
+  });
 
   factory RunSummary.fromApi(Map<String, dynamic> json) => RunSummary(
         id: json['id'] ?? '',
@@ -427,7 +427,7 @@ class RunDetail extends RunSummary {
     required super.createdAt,
     super.finishedAt,
     this.result,
-  );
+  });
 
   factory RunDetail.fromApi(Map<String, dynamic> json) => RunDetail(
         id: json['id'] ?? '',
@@ -461,7 +461,7 @@ class JobResponse {
 
 class JobStatus {
   final String jobId;
-  final String status; // 'pending' | 'running' | 'done' | 'failed'
+  final String status;
   final RunDetail? result;
   final String? error;
   JobStatus({required this.jobId, required this.status, this.result, this.error});
@@ -475,8 +475,8 @@ class JobStatus {
 
 class BalanceRequest {
   final String problemId;
-  final String solver; // 'rpw' | 'cp_sat'
-  final String objective; // 'min_stations' | 'min_cycle_time' | 'max_efficiency' | 'balance_workload'
+  final String solver;
+  final String objective;
   final int? maxStations;
   final int? timeLimit;
 
@@ -515,6 +515,8 @@ class MinCycleRequest {
       };
 }
 
+// ── Problem models ─────────────────────────────────────────────────
+
 class ProblemSummary {
   final String id;
   final String orgId;
@@ -532,7 +534,7 @@ class ProblemSummary {
     required this.targetCycleTime,
     required this.operationsCount,
     required this.createdAt,
-  );
+  });
 
   factory ProblemSummary.fromApi(Map<String, dynamic> json) => ProblemSummary(
         id: json['id'] ?? '',
@@ -556,7 +558,7 @@ class ProblemDetail extends ProblemSummary {
     required super.operationsCount,
     required super.createdAt,
     required this.payload,
-  );
+  });
   factory ProblemDetail.fromApi(Map<String, dynamic> json) => ProblemDetail(
         id: json['id'] ?? '',
         orgId: json['org_id'] ?? '',
@@ -590,6 +592,8 @@ class ProblemRequest {
       };
 }
 
+// ── Workshop / Session models ──────────────────────────────────────
+
 class WorkshopPlan {
   final String id;
   final String orgId;
@@ -617,7 +621,7 @@ class WorkshopPlan {
     this.machineCount,
     required this.createdAt,
     required this.updatedAt,
-  );
+  });
 
   factory WorkshopPlan.fromApi(Map<String, dynamic> json) => WorkshopPlan(
         id: json['id'] ?? '',
@@ -650,7 +654,7 @@ class ProductionSession {
     required this.startTime,
     this.endTime,
     required this.status,
-  );
+  });
 
   factory ProductionSession.fromApi(Map<String, dynamic> json) => ProductionSession(
         id: json['id'] ?? '',
@@ -659,44 +663,5 @@ class ProductionSession {
         startTime: DateTime.tryParse(json['start_time'] ?? '') ?? DateTime.now(),
         endTime: json['end_time'] != null ? DateTime.tryParse(json['end_time']!) : null,
         status: json['status'] ?? '',
-      );
-}
-
-// ── Legacy models for standalone balance tab ───────────────────────
-
-/// Legacy Operation model for standalone balance tab (kept for compatibility)
-class LegacyOperation {
-  final String id;
-  final String name;
-  double duration;
-  final List<String> predecessors;
-  final String machineType;
-  final List<String> requiredSkills;
-  final String section;
-  final bool optional;
-  final String taskType;
-
-  LegacyOperation({
-    required this.id,
-    required this.name,
-    required this.duration,
-    this.predecessors = const [],
-    this.machineType = '',
-    this.requiredSkills = const [],
-    this.section = '',
-    this.optional = false,
-    this.taskType = '',
-  });
-
-  factory LegacyOperation.fromJson(Map<String, dynamic> json) => LegacyOperation(
-        id: json['id'] ?? '',
-        name: json['name'] ?? '',
-        duration: (json['duration'] as num?)?.toDouble() ?? 0,
-        predecessors: (json['predecessors'] as List?)?.cast<String>() ?? [],
-        machineType: json['machine_type'] ?? '',
-        requiredSkills: (json['required_skills'] as List?)?.cast<String>() ?? [],
-        section: json['section'] ?? '',
-        optional: json['optional'] ?? false,
-        taskType: json['task_type'] ?? '',
       );
 }

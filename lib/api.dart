@@ -2,7 +2,7 @@
 /// Backend: https://tlb-api.onrender.com (FastAPI v0.5.0)
 /// Auth: Supabase GoTrue via Supabase Flutter SDK (handles anon key correctly for web/native)
 import 'dart:convert';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 import 'package:http/http.dart' as http;
 
 import 'models.dart';
