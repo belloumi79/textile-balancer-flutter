@@ -71,9 +71,11 @@ class ApiClient {
       };
 
   // ── Organizations ──────────────────────────────────────────────────
-  Future<List<Organization>> getOrganizations() async {
+  Future<List<Organization>> getOrganizations({bool isSuperAdmin = false}) async {
+    // Use admin endpoint for super admins, regular endpoint otherwise
+    final endpoint = isSuperAdmin ? 'v1/admin/orgs' : 'v1/orgs';
     final resp = await http.get(
-      Uri.parse('$_renderBase/v1/orgs'),
+      Uri.parse('$_renderBase/$endpoint'),
       headers: _authHeaders,
     ).timeout(const Duration(seconds: 30));
 

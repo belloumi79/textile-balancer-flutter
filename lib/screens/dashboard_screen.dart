@@ -14,24 +14,25 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProviderStateMixin {
+class _DashboardScreenState extends State<DashboardScreen>
+    with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   final _lineNameCtrl = TextEditingController();
   final _productCtrl = TextEditingController();
   final _cadenceCtrl = TextEditingController();
-  
+
   // Gamme tab controllers
   final _problemNameCtrl = TextEditingController();
   final _problemCycleCtrl = TextEditingController();
   bool _importingProblem = false;
-  
+
   // Nouveau calcul tab controllers
   String _selectedSolver = 'cp_sat';
   String _selectedObjective = 'min_stations';
   int _timeLimit = 30;
   bool _runningCalculation = false;
   String? _calculationLineId;
-  
+
   // Production tab controllers
   final _sessionLineIdCtrl = TextEditingController();
   final _sessionStatusCtrl = TextEditingController(text: 'running');
@@ -86,15 +87,15 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildDashboardTab(state),     // 0 Tableau de bord
-                _buildGammeTab(state),         // 1 Gamme
+                _buildDashboardTab(state), // 0 Tableau de bord
+                _buildGammeTab(state), // 1 Gamme
                 _buildNouveauCalculTab(state), // 2 Nouveau calcul
-                _buildHistoryTab(state),       // 3 Historique
-                _buildProductionTab(state),    // 4 Production
+                _buildHistoryTab(state), // 3 Historique
+                _buildProductionTab(state), // 4 Production
                 _buildJumeauNumeriqueTab(state), // 5 Jumeau numerique
                 _buildPlaceholderTab('Plan de l\'atelier'), // 6
                 _buildPlaceholderTab('Atelier'), // 7
-                _buildSuperAdminTab(state),    // 8 Super admin
+                _buildSuperAdminTab(state), // 8 Super admin
               ],
             ),
           ),
@@ -115,11 +116,7 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
   PreferredSizeWidget _buildAppBar(AppState state) {
     return AppBar(
       title: Row(
-        children: [
-          _buildLogo(),
-          const SizedBox(width: 24),
-          _buildTabBar(),
-        ],
+        children: [_buildLogo(), const SizedBox(width: 24), _buildTabBar()],
       ),
       actions: [
         _buildEntityDropdown(state),
@@ -137,10 +134,7 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
       ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
-        child: Container(
-          height: 1,
-          color: const Color(0xFFEAECF0),
-        ),
+        child: Container(height: 1, color: const Color(0xFFEAECF0)),
       ),
     );
   }
@@ -184,7 +178,10 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
         indicatorColor: const Color(0xFF1E3A5F),
         indicatorWeight: 3,
         labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-        unselectedLabelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+        unselectedLabelStyle: const TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+        ),
         tabs: _tabs.map((t) => Tab(text: t)).toList(),
       ),
     );
@@ -220,7 +217,11 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
               ),
             ),
             const SizedBox(width: 6),
-            const Icon(Icons.keyboard_arrow_down, size: 18, color: Color(0xFF667085)),
+            const Icon(
+              Icons.keyboard_arrow_down,
+              size: 18,
+              color: Color(0xFF667085),
+            ),
           ],
         ),
       ),
@@ -234,12 +235,20 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
       color: const Color(0xFFF3F0FF),
       child: Row(
         children: [
-          const Icon(Icons.admin_panel_settings, size: 18, color: Color(0xFF6941C6)),
+          const Icon(
+            Icons.admin_panel_settings,
+            size: 18,
+            color: Color(0xFF6941C6),
+          ),
           const SizedBox(width: 8),
           const Expanded(
             child: Text(
               'Super admin : acces illimite a toutes les fonctionnalites, sans essai ni quota.',
-              style: TextStyle(fontSize: 13, color: Color(0xFF6941C6), fontWeight: FontWeight.w500),
+              style: TextStyle(
+                fontSize: 13,
+                color: Color(0xFF6941C6),
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],
@@ -252,7 +261,10 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
     final org = state.selectedOrg;
     if (org == null) {
       return const Center(
-        child: Text('Selectionnez une organisation', style: TextStyle(color: Color(0xFF667085))),
+        child: Text(
+          'Selectionnez une organisation',
+          style: TextStyle(color: Color(0xFF667085)),
+        ),
       );
     }
 
@@ -269,7 +281,10 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
               icon: const Icon(Icons.add, size: 18),
               label: const Text('Nouveau calcul'),
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
               ),
             ),
           ),
@@ -298,7 +313,10 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                 ),
               ),
               const SizedBox(height: 4),
-              Text(subtitle, style: const TextStyle(fontSize: 14, color: Color(0xFF667085))),
+              Text(
+                subtitle,
+                style: const TextStyle(fontSize: 14, color: Color(0xFF667085)),
+              ),
             ],
           ),
         ),
@@ -315,7 +333,11 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
           children: [
             const Text(
               'Lignes de production',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFF101828)),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF101828),
+              ),
             ),
             const Spacer(),
             TextButton.icon(
@@ -351,11 +373,19 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
         padding: const EdgeInsets.all(32),
         child: Column(
           children: [
-            const Icon(Icons.factory_outlined, size: 48, color: Color(0xFFD0D5DD)),
+            const Icon(
+              Icons.factory_outlined,
+              size: 48,
+              color: Color(0xFFD0D5DD),
+            ),
             const SizedBox(height: 16),
             const Text(
               'Aucune ligne de production',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFF344054)),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF344054),
+              ),
             ),
             const SizedBox(height: 8),
             const Text(
@@ -388,12 +418,19 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                 children: [
                   Text(
                     line.name,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFF101828)),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF101828),
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     '${line.product} · Cadence cible : ${line.targetCycleTime.toStringAsFixed(1)} min',
-                    style: const TextStyle(fontSize: 13, color: Color(0xFF667085)),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF667085),
+                    ),
                   ),
                 ],
               ),
@@ -405,14 +442,19 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                   icon: const Icon(Icons.calculate, size: 16),
                   label: const Text('Calculer'),
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
                     backgroundColor: const Color(0xFF1E3A5F),
                   ),
                 ),
                 const SizedBox(width: 8),
                 TextButton(
                   onPressed: () => _confirmDeleteLine(line, state),
-                  style: TextButton.styleFrom(foregroundColor: const Color(0xFFF04438)),
+                  style: TextButton.styleFrom(
+                    foregroundColor: const Color(0xFFF04438),
+                  ),
                   child: const Text('Supprimer'),
                 ),
               ],
@@ -428,9 +470,14 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Supprimer la ligne'),
-        content: Text('Supprimer "${line.name}" ? Cette action est irreversible.'),
+        content: Text(
+          'Supprimer "${line.name}" ? Cette action est irreversible.',
+        ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Annuler')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Annuler'),
+          ),
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(ctx);
@@ -438,13 +485,15 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                 await state.deleteProductionLine(line.id);
               } catch (e) {
                 if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Erreur: $e')),
-                  );
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text('Erreur: $e')));
                 }
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFF04438)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFF04438),
+            ),
             child: const Text('Supprimer'),
           ),
         ],
@@ -460,18 +509,28 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
           children: [
             const Text(
               'Derniers calculs',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFF101828)),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF101828),
+              ),
             ),
             const Spacer(),
             TextButton(
-              onPressed: () => _tabController.animateTo(3), // Go to Historique tab
+              onPressed: () =>
+                  _tabController.animateTo(3), // Go to Historique tab
               child: const Text('Tout l\'historique'),
             ),
           ],
         ),
         const SizedBox(height: 12),
         if (state.runsLoading)
-          const Center(child: Padding(padding: EdgeInsets.all(32), child: CircularProgressIndicator()))
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(32),
+              child: CircularProgressIndicator(),
+            ),
+          )
         else if (state.runs.isEmpty)
           Card(
             child: Padding(
@@ -480,9 +539,15 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                 children: [
                   const Icon(Icons.history, size: 48, color: Color(0xFFD0D5DD)),
                   const SizedBox(height: 16),
-                  const Text('Aucun calcul recent', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  const Text(
+                    'Aucun calcul recent',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
                   const SizedBox(height: 8),
-                  const Text('Les calculs apparaîtront ici apres execution.', style: TextStyle(color: Color(0xFF667085))),
+                  const Text(
+                    'Les calculs apparaîtront ici apres execution.',
+                    style: TextStyle(color: Color(0xFF667085)),
+                  ),
                 ],
               ),
             ),
@@ -509,11 +574,26 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
               children: [
                 SizedBox(width: 140, child: Text('Date', style: _headerStyle)),
                 SizedBox(width: 100, child: Text('Type', style: _headerStyle)),
-                SizedBox(width: 80, child: Text('Solveur', style: _headerStyle)),
-                SizedBox(width: 100, child: Text('Statut', style: _headerStyle)),
-                SizedBox(width: 70, child: Text('Stations', style: _headerStyle)),
-                SizedBox(width: 80, child: Text('Cycle (min)', style: _headerStyle)),
-                SizedBox(width: 80, child: Text('Rendement', style: _headerStyle)),
+                SizedBox(
+                  width: 80,
+                  child: Text('Solveur', style: _headerStyle),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: Text('Statut', style: _headerStyle),
+                ),
+                SizedBox(
+                  width: 70,
+                  child: Text('Stations', style: _headerStyle),
+                ),
+                SizedBox(
+                  width: 80,
+                  child: Text('Cycle (min)', style: _headerStyle),
+                ),
+                SizedBox(
+                  width: 80,
+                  child: Text('Rendement', style: _headerStyle),
+                ),
                 SizedBox(width: 60, child: Text('Action', style: _headerStyle)),
               ],
             ),
@@ -539,9 +619,24 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
       ),
       child: Row(
         children: [
-          SizedBox(width: 140, child: Text(fmt.format(r.createdAt), style: const TextStyle(fontSize: 13))),
-          SizedBox(width: 100, child: Text(r.kind, style: const TextStyle(fontSize: 13))),
-          SizedBox(width: 80, child: Text(r.solver, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500))),
+          SizedBox(
+            width: 140,
+            child: Text(
+              fmt.format(r.createdAt),
+              style: const TextStyle(fontSize: 13),
+            ),
+          ),
+          SizedBox(
+            width: 100,
+            child: Text(r.kind, style: const TextStyle(fontSize: 13)),
+          ),
+          SizedBox(
+            width: 80,
+            child: Text(
+              r.solver,
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+            ),
+          ),
           SizedBox(
             width: 100,
             child: Container(
@@ -552,14 +647,36 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
               ),
               child: Text(
                 r.statusLabel,
-                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: r.statusColor),
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: r.statusColor,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
           ),
-          SizedBox(width: 70, child: Text('${r.stationsUsed ?? 0}', style: const TextStyle(fontSize: 13))),
-          SizedBox(width: 80, child: Text(r.actualCycleTime?.toStringAsFixed(1) ?? '-', style: const TextStyle(fontSize: 13))),
-          SizedBox(width: 80, child: Text('${r.efficiency?.toStringAsFixed(1) ?? '-'}%', style: const TextStyle(fontSize: 13))),
+          SizedBox(
+            width: 70,
+            child: Text(
+              '${r.stationsUsed ?? 0}',
+              style: const TextStyle(fontSize: 13),
+            ),
+          ),
+          SizedBox(
+            width: 80,
+            child: Text(
+              r.actualCycleTime?.toStringAsFixed(1) ?? '-',
+              style: const TextStyle(fontSize: 13),
+            ),
+          ),
+          SizedBox(
+            width: 80,
+            child: Text(
+              '${r.efficiency?.toStringAsFixed(1) ?? '-'}%',
+              style: const TextStyle(fontSize: 13),
+            ),
+          ),
           SizedBox(
             width: 60,
             child: TextButton(
@@ -592,12 +709,23 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
               _detailRow('Solveur', r.solver),
               _detailRow('Statut', r.statusLabel),
               _detailRow('Stations', '${r.stationsUsed ?? 0}'),
-              _detailRow('Cycle', '${r.actualCycleTime?.toStringAsFixed(1) ?? '-'} min'),
-              _detailRow('Rendement', '${r.efficiency?.toStringAsFixed(1) ?? '-'}%'),
+              _detailRow(
+                'Cycle',
+                '${r.actualCycleTime?.toStringAsFixed(1) ?? '-'} min',
+              ),
+              _detailRow(
+                'Rendement',
+                '${r.efficiency?.toStringAsFixed(1) ?? '-'}%',
+              ),
             ],
           ),
         ),
-        actions: [TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Fermer'))],
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Fermer'),
+          ),
+        ],
       ),
     );
   }
@@ -610,7 +738,13 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(width: 100, child: Text(label, style: const TextStyle(color: Color(0xFF667085)))),
+          SizedBox(
+            width: 100,
+            child: Text(
+              label,
+              style: const TextStyle(color: Color(0xFF667085)),
+            ),
+          ),
           Text(value, style: const TextStyle(fontWeight: FontWeight.w500)),
         ],
       ),
@@ -626,7 +760,11 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
         children: [
           const Text(
             'Historique des calculs',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: Color(0xFF101828)),
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF101828),
+            ),
           ),
           const SizedBox(height: 8),
           const Text(
@@ -650,14 +788,17 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildSectionHeader(
-                      'Gestion des gammes (SAM)',
-                      'Importez vos gammes, postes et ouvriers pour cr\u00e9er des probl\u00e8mes d\'equilibrage.',
-                      action: ElevatedButton.icon(
+            'Gestion des gammes (SAM)',
+            'Importez vos gammes, postes et ouvriers pour cr\u00e9er des probl\u00e8mes d\'equilibrage.',
+            action: ElevatedButton.icon(
               onPressed: _showImportProblemDialog,
               icon: const Icon(Icons.upload_file, size: 18),
               label: const Text('Importer une gamme'),
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
               ),
             ),
           ),
@@ -676,11 +817,19 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.warning_amber, size: 64, color: Colors.orangeAccent),
+            const Icon(
+              Icons.warning_amber,
+              size: 64,
+              color: Colors.orangeAccent,
+            ),
             const SizedBox(height: 16),
             const Text(
               'Aucune ligne de production',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Color(0xFF344054)),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF344054),
+              ),
             ),
             const SizedBox(height: 8),
             const Text(
@@ -708,25 +857,46 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Configuration', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                  const Text(
+                    'Configuration',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
                   const SizedBox(height: 16),
                   DropdownButtonFormField<ProductionLine>(
                     value: _calculationLineId != null
-                        ? lines.firstWhere((l) => l.id == _calculationLineId, orElse: () => lines.first)
+                        ? lines.firstWhere(
+                            (l) => l.id == _calculationLineId,
+                            orElse: () => lines.first,
+                          )
                         : lines.first,
-                    items: lines.map((l) => DropdownMenuItem(
-                      value: l,
-                      child: Text('${l.name} (${l.product}) - ${l.targetCycleTime.toStringAsFixed(1)} min'),
-                    )).toList(),
-                    onChanged: (v) => setState(() => _calculationLineId = v?.id),
-                    decoration: const InputDecoration(labelText: 'Ligne de production'),
+                    items: lines
+                        .map(
+                          (l) => DropdownMenuItem(
+                            value: l,
+                            child: Text(
+                              '${l.name} (${l.product}) - ${l.targetCycleTime.toStringAsFixed(1)} min',
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (v) =>
+                        setState(() => _calculationLineId = v?.id),
+                    decoration: const InputDecoration(
+                      labelText: 'Ligne de production',
+                    ),
                   ),
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
                     value: _selectedSolver,
                     items: const [
-                      DropdownMenuItem(value: 'rpw', child: Text('RPW — Heuristique rapide')),
-                      DropdownMenuItem(value: 'cp_sat', child: Text('CP-SAT — Optimal (OR-Tools)')),
+                      DropdownMenuItem(
+                        value: 'rpw',
+                        child: Text('RPW — Heuristique rapide'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'cp_sat',
+                        child: Text('CP-SAT — Optimal (OR-Tools)'),
+                      ),
                     ],
                     onChanged: (v) => setState(() => _selectedSolver = v!),
                     decoration: const InputDecoration(labelText: 'Solveur'),
@@ -735,10 +905,22 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                   DropdownButtonFormField<String>(
                     value: _selectedObjective,
                     items: const [
-                      DropdownMenuItem(value: 'min_stations', child: Text('Minimiser les stations')),
-                      DropdownMenuItem(value: 'min_cycle_time', child: Text('Minimiser le temps de cycle')),
-                      DropdownMenuItem(value: 'max_efficiency', child: Text('Maximiser le rendement')),
-                      DropdownMenuItem(value: 'balance_workload', child: Text('Équilibrer la charge')),
+                      DropdownMenuItem(
+                        value: 'min_stations',
+                        child: Text('Minimiser les stations'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'min_cycle_time',
+                        child: Text('Minimiser le temps de cycle'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'max_efficiency',
+                        child: Text('Maximiser le rendement'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'balance_workload',
+                        child: Text('Équilibrer la charge'),
+                      ),
                     ],
                     onChanged: (v) => setState(() => _selectedObjective = v!),
                     decoration: const InputDecoration(labelText: 'Objectif'),
@@ -746,7 +928,9 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                   const SizedBox(height: 12),
                   TextFormField(
                     initialValue: _timeLimit.toString(),
-                    decoration: const InputDecoration(labelText: 'Limite solveur (secondes)'),
+                    decoration: const InputDecoration(
+                      labelText: 'Limite solveur (secondes)',
+                    ),
                     keyboardType: TextInputType.number,
                     onChanged: (v) => _timeLimit = int.tryParse(v) ?? 30,
                   ),
@@ -755,17 +939,32 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                     children: [
                       Expanded(
                         child: FilledButton.icon(
-                          onPressed: _runningCalculation ? null : () => _runBalance(state),
+                          onPressed: _runningCalculation
+                              ? null
+                              : () => _runBalance(state),
                           icon: _runningCalculation
-                              ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                              ? const SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
                               : const Icon(Icons.calculate),
-                          label: Text(_runningCalculation ? 'Calcul en cours...' : 'Lancer l\'equilibrage'),
+                          label: Text(
+                            _runningCalculation
+                                ? 'Calcul en cours...'
+                                : 'Lancer l\'equilibrage',
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: OutlinedButton.icon(
-                          onPressed: _runningCalculation ? null : () => _runMinCycle(state),
+                          onPressed: _runningCalculation
+                              ? null
+                              : () => _runMinCycle(state),
                           icon: const Icon(Icons.speed),
                           label: const Text('Cadence min (Min-Cycle)'),
                         ),
@@ -796,7 +995,10 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
               icon: const Icon(Icons.play_arrow, size: 18),
               label: const Text('Nouvelle session'),
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
               ),
             ),
           ),
@@ -822,7 +1024,10 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
               icon: const Icon(Icons.add, size: 18),
               label: const Text('Nouveau plan'),
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
               ),
             ),
           ),
@@ -844,7 +1049,11 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
             const SizedBox(height: 16),
             const Text(
               'Acces reserve aux super-administrateurs',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Color(0xFF344054)),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF344054),
+              ),
             ),
             const SizedBox(height: 8),
             const Text(
@@ -869,7 +1078,10 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
               icon: const Icon(Icons.add, size: 18),
               label: const Text('Creer organisation'),
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
               ),
             ),
           ),
@@ -895,53 +1107,91 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
             children: [
               TextField(
                 controller: _problemNameCtrl,
-                decoration: const InputDecoration(labelText: 'Nom du probleme', hintText: 'ex: Chemise Homme'),
+                decoration: const InputDecoration(
+                  labelText: 'Nom du probleme',
+                  hintText: 'ex: Chemise Homme',
+                ),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: _problemCycleCtrl,
-                decoration: const InputDecoration(labelText: 'Cadence cible (min)', hintText: '1.5'),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                decoration: const InputDecoration(
+                  labelText: 'Cadence cible (min)',
+                  hintText: '1.5',
+                ),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
               ),
               const SizedBox(height: 16),
-              const Text('Selectionnez les fichiers CSV/Excel :', style: TextStyle(fontWeight: FontWeight.w600)),
+              const Text(
+                'Selectionnez les fichiers CSV/Excel :',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
               const SizedBox(height: 8),
-              _FilePickerRow(label: 'Fichier SAM (requis)', onPick: (f) => _samFile = f),
-              _FilePickerRow(label: 'Fichier Postes (optionnel)', onPick: (f) => _workstationsFile = f),
-              _FilePickerRow(label: 'Fichier Ouvriers (optionnel)', onPick: (f) => _workersFile = f),
+              _FilePickerRow(
+                label: 'Fichier SAM (requis)',
+                onPick: (f) => _samFile = f,
+              ),
+              _FilePickerRow(
+                label: 'Fichier Postes (optionnel)',
+                onPick: (f) => _workstationsFile = f,
+              ),
+              _FilePickerRow(
+                label: 'Fichier Ouvriers (optionnel)',
+                onPick: (f) => _workersFile = f,
+              ),
             ],
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Annuler')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Annuler'),
+          ),
           FilledButton(
-            onPressed: _importingProblem ? null : () async {
-              if (_problemNameCtrl.text.isEmpty || _samFile == null) return;
-              Navigator.pop(ctx);
-              setState(() => _importingProblem = true);
-              try {
-                final state = context.read<AppState>();
-                final result = await state.importProblem(
-                  name: _problemNameCtrl.text.trim(),
-                  targetCycleTime: double.tryParse(_problemCycleCtrl.text) ?? 1.5,
-                  samFile: _samFile!,
-                  workstationsFile: _workstationsFile,
-                  workersFile: _workersFile,
-                );
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Probleme importe: ${result?.problemId ?? "OK"}')),
-                  );
-                  _samFile = _workstationsFile = _workersFile = null;
-                }
-              } catch (e) {
-                if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: $e')));
-              } finally {
-                if (mounted) setState(() => _importingProblem = false);
-              }
-            },
+            onPressed: _importingProblem
+                ? null
+                : () async {
+                    if (_problemNameCtrl.text.isEmpty || _samFile == null)
+                      return;
+                    Navigator.pop(ctx);
+                    setState(() => _importingProblem = true);
+                    try {
+                      final state = context.read<AppState>();
+                      final result = await state.importProblem(
+                        name: _problemNameCtrl.text.trim(),
+                        targetCycleTime:
+                            double.tryParse(_problemCycleCtrl.text) ?? 1.5,
+                        samFile: _samFile!,
+                        workstationsFile: _workstationsFile,
+                        workersFile: _workersFile,
+                      );
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Probleme importe: ${result?.problemId ?? "OK"}',
+                            ),
+                          ),
+                        );
+                        _samFile = _workstationsFile = _workersFile = null;
+                      }
+                    } catch (e) {
+                      if (mounted)
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text('Erreur: $e')));
+                    } finally {
+                      if (mounted) setState(() => _importingProblem = false);
+                    }
+                  },
             child: _importingProblem
-                ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
                 : const Text('Importer'),
           ),
         ],
@@ -955,7 +1205,12 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
 
   Widget _buildProblemsList(AppState state) {
     if (state.problemsLoading) {
-      return const Center(child: Padding(padding: EdgeInsets.all(32), child: CircularProgressIndicator()));
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(32),
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
     if (state.problems.isEmpty) {
       return Card(
@@ -963,11 +1218,22 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
           padding: const EdgeInsets.all(32),
           child: Column(
             children: [
-              const Icon(Icons.inventory_2_outlined, size: 48, color: Color(0xFFD0D5DD)),
+              const Icon(
+                Icons.inventory_2_outlined,
+                size: 48,
+                color: Color(0xFFD0D5DD),
+              ),
               const SizedBox(height: 16),
-              const Text('Aucune gamme importee', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              const Text(
+                'Aucune gamme importee',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
               const SizedBox(height: 8),
-              const Text('Importez votre premiere gamme SAM pour commencer.', style: TextStyle(color: Color(0xFF667085)), textAlign: TextAlign.center),
+              const Text(
+                'Importez votre premiere gamme SAM pour commencer.',
+                style: TextStyle(color: Color(0xFF667085)),
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: _showImportProblemDialog,
@@ -980,36 +1246,55 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
       );
     }
     return Column(
-      children: state.problems.whereType<ProblemSummary>().map((p) => Card(
-        margin: const EdgeInsets.only(bottom: 12),
-        child: ListTile(
-          title: Text(p.name, style: const TextStyle(fontWeight: FontWeight.w600)),
-          subtitle: Text('Cadence: ${p.targetCycleTime.toStringAsFixed(1)} min · ${p.operationsCount} operations'),
-          trailing: PopupMenuButton<String>(
-            onSelected: (v) async {
-              if (v == 'delete') {
-                final confirm = await showDialog<bool>(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: const Text('Supprimer la gamme'),
-                    content: Text('Supprimer "${p.name}" ?'),
-                    actions: [
-                      TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Annuler')),
-                      FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Supprimer')),
-                    ],
-                  ),
-                );
-                if (confirm == true) {
-                  // Note: delete problem API not implemented yet
-                }
-              }
-            },
-            itemBuilder: (ctx) => [
-              const PopupMenuItem(value: 'delete', child: Text('Supprimer')),
-            ],
-          ),
-        ),
-      )).toList(),
+      children: state.problems
+          .whereType<ProblemSummary>()
+          .map(
+            (p) => Card(
+              margin: const EdgeInsets.only(bottom: 12),
+              child: ListTile(
+                title: Text(
+                  p.name,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                subtitle: Text(
+                  'Cadence: ${p.targetCycleTime.toStringAsFixed(1)} min · ${p.operationsCount} operations',
+                ),
+                trailing: PopupMenuButton<String>(
+                  onSelected: (v) async {
+                    if (v == 'delete') {
+                      final confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text('Supprimer la gamme'),
+                          content: Text('Supprimer "${p.name}" ?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(ctx, false),
+                              child: const Text('Annuler'),
+                            ),
+                            FilledButton(
+                              onPressed: () => Navigator.pop(ctx, true),
+                              child: const Text('Supprimer'),
+                            ),
+                          ],
+                        ),
+                      );
+                      if (confirm == true) {
+                        // Note: delete problem API not implemented yet
+                      }
+                    }
+                  },
+                  itemBuilder: (ctx) => [
+                    const PopupMenuItem(
+                      value: 'delete',
+                      child: Text('Supprimer'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
+          .toList(),
     );
   }
 
@@ -1030,7 +1315,10 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
       // Poll job status
       _pollJob(state, job.jobId);
     } catch (e) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: $e')));
+      if (mounted)
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Erreur: $e')));
     } finally {
       if (mounted) setState(() => _runningCalculation = false);
     }
@@ -1040,11 +1328,18 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
     if (_calculationLineId == null) return;
     setState(() => _runningCalculation = true);
     try {
-      final req = MinCycleRequest(problemId: '', solver: _selectedSolver, timeLimit: _timeLimit);
+      final req = MinCycleRequest(
+        problemId: '',
+        solver: _selectedSolver,
+        timeLimit: _timeLimit,
+      );
       final job = await state.api.startMinCycle(state.selectedOrg!.id, req);
       _pollJob(state, job.jobId);
     } catch (e) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: $e')));
+      if (mounted)
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Erreur: $e')));
     } finally {
       if (mounted) setState(() => _runningCalculation = false);
     }
@@ -1057,7 +1352,13 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
       if (status.status == 'done' || status.status == 'failed') {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(status.status == 'done' ? 'Calcul termine !' : 'Échec: ${status.error}')),
+            SnackBar(
+              content: Text(
+                status.status == 'done'
+                    ? 'Calcul termine !'
+                    : 'Échec: ${status.error}',
+              ),
+            ),
           );
         }
         return false;
@@ -1078,12 +1379,21 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
           mainAxisSize: MainAxisSize.min,
           children: [
             DropdownButtonFormField<ProductionLine>(
-              items: context.read<AppState>().productionLines.whereType<ProductionLine>().map((l) => DropdownMenuItem(
-                value: l,
-                child: Text('${l.name} (${l.product})'),
-              )).toList(),
+              items: context
+                  .read<AppState>()
+                  .productionLines
+                  .whereType<ProductionLine>()
+                  .map(
+                    (l) => DropdownMenuItem(
+                      value: l,
+                      child: Text('${l.name} (${l.product})'),
+                    ),
+                  )
+                  .toList(),
               onChanged: (v) => _sessionLineIdCtrl.text = v?.id ?? '',
-              decoration: const InputDecoration(labelText: 'Ligne de production'),
+              decoration: const InputDecoration(
+                labelText: 'Ligne de production',
+              ),
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(
@@ -1099,23 +1409,34 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Annuler')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Annuler'),
+          ),
           FilledButton(
             onPressed: () async {
               if (_sessionLineIdCtrl.text.isEmpty) return;
               Navigator.pop(ctx);
               try {
                 final state = context.read<AppState>();
-                await state.createProductionSession(ProductionSession(
-                  id: '',
-                  orgId: state.selectedOrg!.id,
-                  lineId: _sessionLineIdCtrl.text,
-                  startTime: DateTime.now(),
-                  status: _sessionStatusCtrl.text,
-                ));
-                if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Session creee')));
+                await state.createProductionSession(
+                  ProductionSession(
+                    id: '',
+                    orgId: state.selectedOrg!.id,
+                    lineId: _sessionLineIdCtrl.text,
+                    startTime: DateTime.now(),
+                    status: _sessionStatusCtrl.text,
+                  ),
+                );
+                if (mounted)
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Session creee')),
+                  );
               } catch (e) {
-                if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: $e')));
+                if (mounted)
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text('Erreur: $e')));
               }
             },
             child: const Text('Creer'),
@@ -1132,97 +1453,174 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
           padding: const EdgeInsets.all(32),
           child: Column(
             children: [
-              const Icon(Icons.production_quantity_limits, size: 48, color: Color(0xFFD0D5DD)),
+              const Icon(
+                Icons.production_quantity_limits,
+                size: 48,
+                color: Color(0xFFD0D5DD),
+              ),
               const SizedBox(height: 16),
-              const Text('Aucune session de production', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              const Text(
+                'Aucune session de production',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
               const SizedBox(height: 8),
-              const Text('Creez votre premiere session pour suivre la production.', style: TextStyle(color: Color(0xFF667085)), textAlign: TextAlign.center),
+              const Text(
+                'Creez votre premiere session pour suivre la production.',
+                style: TextStyle(color: Color(0xFF667085)),
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 16),
-              ElevatedButton.icon(onPressed: _showCreateSessionDialog, icon: const Icon(Icons.add), label: const Text('Nouvelle session')),
+              ElevatedButton.icon(
+                onPressed: _showCreateSessionDialog,
+                icon: const Icon(Icons.add),
+                label: const Text('Nouvelle session'),
+              ),
             ],
           ),
         ),
       );
     }
     return Column(
-      children: state.productionSessions.whereType<ProductionSession>().map((s) => Card(
-        margin: const EdgeInsets.only(bottom: 12),
-        child: ListTile(
-          title: Text('Session ${s.id.substring(0, 8)}', style: const TextStyle(fontWeight: FontWeight.w600)),
-          subtitle: Text('Ligne: ${s.lineId} · Statut: ${s.status} · Debut: ${DateFormat('dd/MM HH:mm').format(s.startTime)}'),
-          trailing: PopupMenuButton<String>(
-            onSelected: (v) async {
-              if (v == 'stop') {
-                await state.updateProductionSession(s.id, {'status': 'completed', 'end_time': DateTime.now().toIso8601String()});
-              } else if (v == 'delete') {
-                final confirm = await showDialog<bool>(context: context, builder: (ctx) => AlertDialog(
-                  title: const Text('Supprimer la session'),
-                  content: const Text('Confirmer la suppression ?'),
-                  actions: [TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Annuler')), FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Supprimer'))],
-                ));
-                if (confirm == true) await state.deleteProductionSession(s.id);
-              }
-            },
-            itemBuilder: (ctx) => [
-              if (s.status == 'running') const PopupMenuItem(value: 'stop', child: Text('Arrêter')),
-              const PopupMenuItem(value: 'delete', child: Text('Supprimer')),
-            ],
-          ),
-        ),
-      )).toList(),
+      children: state.productionSessions
+          .whereType<ProductionSession>()
+          .map(
+            (s) => Card(
+              margin: const EdgeInsets.only(bottom: 12),
+              child: ListTile(
+                title: Text(
+                  'Session ${s.id.substring(0, 8)}',
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                subtitle: Text(
+                  'Ligne: ${s.lineId} · Statut: ${s.status} · Debut: ${DateFormat('dd/MM HH:mm').format(s.startTime)}',
+                ),
+                trailing: PopupMenuButton<String>(
+                  onSelected: (v) async {
+                    if (v == 'stop') {
+                      await state.updateProductionSession(s.id, {
+                        'status': 'completed',
+                        'end_time': DateTime.now().toIso8601String(),
+                      });
+                    } else if (v == 'delete') {
+                      final confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: const Text('Supprimer la session'),
+                          content: const Text('Confirmer la suppression ?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(ctx, false),
+                              child: const Text('Annuler'),
+                            ),
+                            FilledButton(
+                              onPressed: () => Navigator.pop(ctx, true),
+                              child: const Text('Supprimer'),
+                            ),
+                          ],
+                        ),
+                      );
+                      if (confirm == true)
+                        await state.deleteProductionSession(s.id);
+                    }
+                  },
+                  itemBuilder: (ctx) => [
+                    if (s.status == 'running')
+                      const PopupMenuItem(
+                        value: 'stop',
+                        child: Text('Arrêter'),
+                      ),
+                    const PopupMenuItem(
+                      value: 'delete',
+                      child: Text('Supprimer'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
+          .toList(),
     );
   }
 
   // ── Jumeau Numerique Tab Components ─────────────────────────────────
 
   void _showCreateWorkshopPlanDialog() {
-      final nameCtrl = TextEditingController();
-      final widthCtrl = TextEditingController(text: '30');
-      final lengthCtrl = TextEditingController(text: '50');
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Nouveau plan d\'atelier'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Nom', hintText: 'ex: Atelier Principal')),
-              const SizedBox(height: 12),
-              TextField(controller: widthCtrl, decoration: const InputDecoration(labelText: 'Largeur (m)', hintText: '30'), keyboardType: TextInputType.number),
-              const SizedBox(height: 12),
-              TextField(controller: lengthCtrl, decoration: const InputDecoration(labelText: 'Longueur (m)', hintText: '50'), keyboardType: TextInputType.number),
-            ],
-          ),
-          actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Annuler')),
-            FilledButton(
-              onPressed: () async {
-                if (nameCtrl.text.isEmpty) return;
-                Navigator.pop(ctx);
-                try {
-                  final state = context.read<AppState>();
-                  final plan = WorkshopPlan(
-                    id: '',
-                    orgId: state.selectedOrg!.id,
-                    name: nameCtrl.text.trim(),
-                    version: '1.0',
-                    widthM: double.tryParse(widthCtrl.text) ?? 30,
-                    lengthM: double.tryParse(lengthCtrl.text) ?? 50,
-                    createdAt: DateTime.now(),
-                    updatedAt: DateTime.now(),
-                  );
-                  await state.addWorkshopPlan(plan);
-                  if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Plan cree')));
-                } catch (e) {
-                  if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: $e')));
-                }
-              },
-              child: const Text('Creer'),
+    final nameCtrl = TextEditingController();
+    final widthCtrl = TextEditingController(text: '30');
+    final lengthCtrl = TextEditingController(text: '50');
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Nouveau plan d\'atelier'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Nom',
+                hintText: 'ex: Atelier Principal',
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: widthCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Largeur (m)',
+                hintText: '30',
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: lengthCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Longueur (m)',
+                hintText: '50',
+              ),
+              keyboardType: TextInputType.number,
             ),
           ],
         ),
-      );
-    }
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Annuler'),
+          ),
+          FilledButton(
+            onPressed: () async {
+              if (nameCtrl.text.isEmpty) return;
+              Navigator.pop(ctx);
+              try {
+                final state = context.read<AppState>();
+                final plan = WorkshopPlan(
+                  id: '',
+                  orgId: state.selectedOrg!.id,
+                  name: nameCtrl.text.trim(),
+                  version: '1.0',
+                  widthM: double.tryParse(widthCtrl.text) ?? 30,
+                  lengthM: double.tryParse(lengthCtrl.text) ?? 50,
+                  createdAt: DateTime.now(),
+                  updatedAt: DateTime.now(),
+                );
+                await state.addWorkshopPlan(plan);
+                if (mounted)
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(const SnackBar(content: Text('Plan cree')));
+              } catch (e) {
+                if (mounted)
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text('Erreur: $e')));
+              }
+            },
+            child: const Text('Creer'),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildWorkshopPlansGrid(AppState state) {
     if (state.workshopPlans.isEmpty) {
@@ -1233,11 +1631,22 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
             children: [
               const Icon(Icons.map, size: 48, color: Color(0xFFD0D5DD)),
               const SizedBox(height: 16),
-              const Text('Aucun plan d\'atelier', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              const Text(
+                'Aucun plan d\'atelier',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
               const SizedBox(height: 8),
-              const Text('Creez votre premier plan pour le jumeau numerique.', style: TextStyle(color: Color(0xFF667085)), textAlign: TextAlign.center),
+              const Text(
+                'Creez votre premier plan pour le jumeau numerique.',
+                style: TextStyle(color: Color(0xFF667085)),
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 16),
-              ElevatedButton.icon(onPressed: _showCreateWorkshopPlanDialog, icon: const Icon(Icons.add), label: const Text('Nouveau plan')),
+              ElevatedButton.icon(
+                onPressed: _showCreateWorkshopPlanDialog,
+                icon: const Icon(Icons.add),
+                label: const Text('Nouveau plan'),
+              ),
             ],
           ),
         ),
@@ -1246,29 +1655,47 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: 1.2, crossAxisSpacing: 16, mainAxisSpacing: 16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        childAspectRatio: 1.2,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+      ),
       itemCount: state.workshopPlans.whereType<WorkshopPlan>().length,
       itemBuilder: (ctx, i) {
         final plan = state.workshopPlans.whereType<WorkshopPlan>().toList()[i];
         return Card(
           child: InkWell(
-            onTap: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ouvrir ${plan.name} (placeholder)'))),
+            onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Ouvrir ${plan.name} (placeholder)')),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(plan.name, style: const TextStyle(fontWeight: FontWeight.w600)),
+                  Text(
+                    plan.name,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
                   const SizedBox(height: 8),
-                  Text('${plan.widthM.toStringAsFixed(0)} x ${plan.lengthM.toStringAsFixed(0)} m'),
+                  Text(
+                    '${plan.widthM.toStringAsFixed(0)} x ${plan.lengthM.toStringAsFixed(0)} m',
+                  ),
                   const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      IconButton(icon: const Icon(Icons.edit), onPressed: () {}),
-                      IconButton(icon: const Icon(Icons.delete), onPressed: () async {
-                        await state.deleteWorkshopPlan(plan.id);
-                      }),
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () async {
+                          await state.deleteWorkshopPlan(plan.id);
+                        },
+                      ),
                     ],
                   ),
                 ],
@@ -1292,23 +1719,47 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Nom', hintText: 'ex: Usine Textile Alpha')),
+            TextField(
+              controller: nameCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Nom',
+                hintText: 'ex: Usine Textile Alpha',
+              ),
+            ),
             const SizedBox(height: 12),
-            TextField(controller: countryCtrl, decoration: const InputDecoration(labelText: 'Pays (code ISO)', hintText: 'TN')),
+            TextField(
+              controller: countryCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Pays (code ISO)',
+                hintText: 'TN',
+              ),
+            ),
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Annuler')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Annuler'),
+          ),
           FilledButton(
             onPressed: () async {
               if (nameCtrl.text.isEmpty) return;
               Navigator.pop(ctx);
               try {
                 final state = context.read<AppState>();
-                await state.createOrganization(nameCtrl.text.trim(), countryCtrl.text.trim().toUpperCase());
-                if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Organisation creee')));
+                await state.createOrganization(
+                  nameCtrl.text.trim(),
+                  countryCtrl.text.trim().toUpperCase(),
+                );
+                if (mounted)
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Organisation creee')),
+                  );
               } catch (e) {
-                if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: $e')));
+                if (mounted)
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text('Erreur: $e')));
               }
             },
             child: const Text('Creer'),
@@ -1326,13 +1777,28 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
           padding: const EdgeInsets.all(32),
           child: Column(
             children: [
-              const Icon(Icons.business_outlined, size: 48, color: Color(0xFFD0D5DD)),
+              const Icon(
+                Icons.business_outlined,
+                size: 48,
+                color: Color(0xFFD0D5DD),
+              ),
               const SizedBox(height: 16),
-              const Text('Aucune organisation', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              const Text(
+                'Aucune organisation',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
               const SizedBox(height: 8),
-              const Text('Creez la premiere organisation.', style: TextStyle(color: Color(0xFF667085)), textAlign: TextAlign.center),
+              const Text(
+                'Creez la premiere organisation.',
+                style: TextStyle(color: Color(0xFF667085)),
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 16),
-              ElevatedButton.icon(onPressed: _showCreateOrgDialog, icon: const Icon(Icons.add), label: const Text('Creer organisation')),
+              ElevatedButton.icon(
+                onPressed: _showCreateOrgDialog,
+                icon: const Icon(Icons.add),
+                label: const Text('Creer organisation'),
+              ),
             ],
           ),
         ),
@@ -1343,50 +1809,161 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: const BoxDecoration(color: Color(0xFFF9FAFB), borderRadius: BorderRadius.vertical(top: Radius.circular(12))),
+            decoration: const BoxDecoration(
+              color: Color(0xFFF9FAFB),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+            ),
             child: const Row(
               children: [
-                SizedBox(width: 200, child: Text('Organisation', style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF667085)))),
-                SizedBox(width: 100, child: Text('Pays', style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF667085)))),
-                SizedBox(width: 180, child: Text('Creee le', style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF667085)))),
-                SizedBox(width: 100, child: Text('Abonnement', style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF667085)))),
-                SizedBox(width: 100, child: Text('Action', style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF667085)))),
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    'Organisation',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF667085),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: Text(
+                    'Pays',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF667085),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 180,
+                  child: Text(
+                    'Creee le',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF667085),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: Text(
+                    'Abonnement',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF667085),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: Text(
+                    'Action',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF667085),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-          ...orgs.map((o) => Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFEAECF0)))),
-            child: Row(
-              children: [
-                SizedBox(width: 200, child: Text(o.name, style: const TextStyle(fontSize: 13))),
-                SizedBox(width: 100, child: Text(o.country, style: const TextStyle(fontSize: 13))),
-                SizedBox(width: 180, child: Text(DateFormat('dd/MM/yyyy').format(o.createdAt), style: const TextStyle(fontSize: 13))),
-                SizedBox(width: 100, child: Text(o.subscription?.status ?? '-', style: const TextStyle(fontSize: 13))),
-                SizedBox(width: 100, child: PopupMenuButton<String>(
-                  onSelected: (v) async {
-                    if (v == 'delete') {
-                      final confirm = await showDialog<bool>(context: context, builder: (ctx) => AlertDialog(
-                        title: const Text('Supprimer l\'organisation'),
-                        content: Text('Confirmer en tapant: ${o.name}'),
-                        actions: [TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Annuler')), FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Supprimer'))],
-                      ));
-                      if (confirm == true) await state.deleteOrganization(o.id, o.name);
-                    }
-                  },
-                  itemBuilder: (ctx) => [const PopupMenuItem(value: 'delete', child: Text('Supprimer'))],
+          ...orgs
+              .map(
+                (o) => (Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Color(0xFFEAECF0)),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 200,
+                        child: Text(
+                          o.name,
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 100,
+                        child: Text(
+                          o.country,
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 180,
+                        child: Text(
+                          DateFormat('dd/MM/yyyy').format(o.createdAt),
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 100,
+                        child: Text(
+                          o.subscription?.status ?? '-',
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 100,
+                        child: PopupMenuButton<String>(
+                          onSelected: (v) async {
+                            if (v == 'delete') {
+                              final confirm = await showDialog<bool>(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  title: const Text(
+                                    'Supprimer l\'organisation',
+                                  ),
+                                  content: Text(
+                                    'Confirmer en tapant: ${o.name}',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(ctx, false),
+                                      child: const Text('Annuler'),
+                                    ),
+                                    FilledButton(
+                                      onPressed: () => Navigator.pop(ctx, true),
+                                      child: const Text('Supprimer'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                              if (confirm == true)
+                                await state.deleteOrganization(o.id, o.name);
+                            }
+                          },
+                          itemBuilder: (ctx) => [
+                            const PopupMenuItem(
+                              value: 'delete',
+                              child: Text('Supprimer'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 )),
-              ],
-            ),
-          )),
-        ).toList(),
+              )
+              .toList(),
         ],
-      );
+      ),
     );
   }
 
   // ── File Picker Helper ─────────────────────────────────────────────
-  Widget _FilePickerRow({required String label, required Function(List<int>?) onPick}) {
+  Widget _FilePickerRow({
+    required String label,
+    required Function(List<int>?) onPick,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -1446,53 +2023,82 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
             children: [
               Row(
                 children: [
-                  const Text('Ajouter une ligne', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                  const Text(
+                    'Ajouter une ligne',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  ),
                   const Spacer(),
-                  IconButton(onPressed: () => Navigator.pop(ctx), icon: const Icon(Icons.close)),
+                  IconButton(
+                    onPressed: () => Navigator.pop(ctx),
+                    icon: const Icon(Icons.close),
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _lineNameCtrl,
-                decoration: const InputDecoration(labelText: 'Nom de la ligne', hintText: 'ex: Dos'),
+                decoration: const InputDecoration(
+                  labelText: 'Nom de la ligne',
+                  hintText: 'ex: Dos',
+                ),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: _productCtrl,
-                decoration: const InputDecoration(labelText: 'Produit', hintText: 'ex: PANTALON THEO'),
+                decoration: const InputDecoration(
+                  labelText: 'Produit',
+                  hintText: 'ex: PANTALON THEO',
+                ),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: _cadenceCtrl,
-                decoration: const InputDecoration(labelText: 'Cadence cible (min)', hintText: 'ex: 5'),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                decoration: const InputDecoration(
+                  labelText: 'Cadence cible (min)',
+                  hintText: 'ex: 5',
+                ),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
               ),
               const SizedBox(height: 24),
               Row(
                 children: [
-                  Expanded(child: TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Annuler'))),
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      child: const Text('Annuler'),
+                    ),
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
                         final cadence = double.tryParse(_cadenceCtrl.text);
-                        if (_lineNameCtrl.text.isEmpty || _productCtrl.text.isEmpty || cadence == null) return;
+                        if (_lineNameCtrl.text.isEmpty ||
+                            _productCtrl.text.isEmpty ||
+                            cadence == null)
+                          return;
                         final state = context.read<AppState>();
                         try {
-                          await state.addProductionLine(ProductionLine(
-                            id: '',
-                            orgId: state.selectedOrg!.id,
-                            name: _lineNameCtrl.text.trim(),
-                            product: _productCtrl.text.trim(),
-                            targetCycleTime: cadence,
-                            createdBy: '',
-                            createdAt: DateTime.now(),
-                            updatedAt: DateTime.now(),
-                          ));
+                          await state.addProductionLine(
+                            ProductionLine(
+                              id: '',
+                              orgId: state.selectedOrg!.id,
+                              name: _lineNameCtrl.text.trim(),
+                              product: _productCtrl.text.trim(),
+                              targetCycleTime: cadence,
+                              createdBy: '',
+                              createdAt: DateTime.now(),
+                              updatedAt: DateTime.now(),
+                            ),
+                          );
                           if (mounted) Navigator.pop(ctx);
                         } catch (e) {
                           if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: $e')));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Erreur: $e')),
+                            );
                           }
                         }
                       },
@@ -1519,7 +2125,11 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
           const SizedBox(height: 16),
           Text(
             title,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Color(0xFF344054)),
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF344054),
+            ),
           ),
           const SizedBox(height: 8),
           const Text(
@@ -1533,14 +2143,22 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
 
   IconData _getIconForTab(String title) {
     switch (title) {
-      case 'Gamme': return Icons.route;
-      case 'Nouveau calcul': return Icons.calculate;
-      case 'Production': return Icons.production_quantity_limits;
-      case 'Jumeau num\u00e9rique': return Icons.memory;
-      case 'Plan de l\'atelier': return Icons.map;
-      case 'Atelier': return Icons.factory;
-      case 'Super admin': return Icons.admin_panel_settings;
-      default: return Icons.dashboard;
+      case 'Gamme':
+        return Icons.route;
+      case 'Nouveau calcul':
+        return Icons.calculate;
+      case 'Production':
+        return Icons.production_quantity_limits;
+      case 'Jumeau num\u00e9rique':
+        return Icons.memory;
+      case 'Plan de l\'atelier':
+        return Icons.map;
+      case 'Atelier':
+        return Icons.factory;
+      case 'Super admin':
+        return Icons.admin_panel_settings;
+      default:
+        return Icons.dashboard;
     }
   }
 }

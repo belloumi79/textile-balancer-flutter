@@ -128,7 +128,7 @@ class AppState extends ChangeNotifier {
   // ── Organization Management ───────────────────────────────────────
   Future<void> _loadOrganizations() async {
     try {
-      _organizations = await _api.getOrganizations();
+      _organizations = await _api.getOrganizations(isSuperAdmin: _isSuperAdmin);
       if (_selectedOrg == null && _organizations.isNotEmpty) {
         _selectedOrg = _organizations.first;
       }
