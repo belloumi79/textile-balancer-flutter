@@ -7,6 +7,8 @@ import 'api.dart';
 class AppState extends ChangeNotifier {
   final ApiClient _api = ApiClient();
 
+  ApiClient get api => _api;
+
   // ── Auth ──────────────────────────────────────────────────────────
   String? _accessToken;
   dynamic _currentUser;
@@ -45,6 +47,13 @@ class AppState extends ChangeNotifier {
   List<dynamic> get problems => _problems;
   bool get problemsLoading => _problemsLoading;
 
+  // ── Production Sessions ───────────────────────────────────────────
+  List<dynamic> _productionSessions = [];
+  bool _sessionsLoading = false;
+
+  List<dynamic> get productionSessions => _productionSessions;
+  bool get sessionsLoading => _sessionsLoading;
+
   // ── Workshop Plans ────────────────────────────────────────────────
   List<dynamic> _workshopPlans = [];
   bool _plansLoading = false;
@@ -52,7 +61,6 @@ class AppState extends ChangeNotifier {
   List<dynamic> get workshopPlans => _workshopPlans;
   bool get plansLoading => _plansLoading;
 
-  // ── UI State ──────────────────────────────────────────────────────
   int _selectedTabIndex = 0; // 0=Dashboard, 1=Gamme, 2=Nouveau calcul, etc.
   bool _sidebarCollapsed = false;
 
@@ -112,6 +120,7 @@ class AppState extends ChangeNotifier {
     _runs = [];
     _problems = [];
     _workshopPlans = [];
+    _productionSessions = [];
     _api.logout();
     notifyListeners();
   }
@@ -142,6 +151,7 @@ class AppState extends ChangeNotifier {
       _loadRuns(),
       _loadProblems(),
       _loadWorkshopPlans(),
+      _loadProductionSessions(),
     ]);
   }
 
@@ -168,7 +178,7 @@ class AppState extends ChangeNotifier {
     } catch (e) {
       debugPrint('Load runs error: $e');
     } finally {
-      _linesLoading = false;
+      _runsLoading = false;
       notifyListeners();
     }
   }
@@ -197,6 +207,20 @@ class AppState extends ChangeNotifier {
       debugPrint('Load workshop plans error: $e');
     } finally {
       _plansLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> _loadProductionSessions() async {
+    if (_selectedOrg == null) return;
+    _sessionsLoading = true;
+    notifyListeners();
+    try {
+      _productionSessions = await _api.getProductionSessions(_selectedOrg!.id);
+    } catch (e) {
+      debugPrint('Load production sessions error: $e');
+    } finally {
+      _sessionsLoading = false;
       notifyListeners();
     }
   }
@@ -245,15 +269,184 @@ class AppState extends ChangeNotifier {
   }
 
   // ── Workshop Plans ────────────────────────────────────────────────
-  Future<void> addWorkshopPlan(dynamic plan) async {
+  Future<void> addWorkshopPlan(WorkshopPlan plan) async {
     if (_selectedOrg == null) return;
     try {
-      final created = await _api.getWorkshopPlan(_selectedOrg!.id, plan.id);
+      final created = await _api.createWorkshopPlan(_selectedOrg!.id, plan);
       _workshopPlans.insert(0, created);
       notifyListeners();
     } catch (e) {
       debugPrint('Add workshop plan error: $e');
       rethrow;
+    }
+  }
+
+  Future<void> updateWorkshopPlan(String planId, Map<String, dynamic> updates) async {
+    if (_selectedOrg == null) return;
+    try {
+      final updated = await _api.updateWorkshopPlan(_selectedOrg!.id, planId, updates);
+      final idx = _workshopPlans.indexWhere((p) => p.id == planId);
+      if (idx >= 0) {
+        _workshopPlans[idx] = updated;
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Update workshop plan error: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> deleteWorkshopPlan(String planId) async {
+    if (_selectedOrg == null) return;
+    try {
+      await _api.deleteWorkshopPlan(_selectedOrg!.id, planId);
+      _workshopPlans.removeWhere((p) => p.id == planId);
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Delete workshop plan error: $e');
+      rethrow;
+    }
+  }
+
+  // ── Production Sessions ───────────────────────────────────────────
+  Future<void> loadProductionSessions() async {
+    if (_selectedOrg == null) return;
+    try {
+      _productionSessions = await _api.getProductionSessions(_selectedOrg!.id);
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Load production sessions error: $e');
+    }
+  }
+
+  Future<void> createProductionSession(ProductionSession session) async {
+    if (_selectedOrg == null) return;
+    try {
+      final created = await _api.createProductionSession(_selectedOrg!.id, session);
+      _productionSessions.insert(0, created);
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Create production session error: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> updateProductionSession(String sessionId, Map<String, dynamic> updates) async {
+    if (_selectedOrg == null) return;
+    try {
+      final updated = await _api.updateProductionSession(_selectedOrg!.id, sessionId, updates);
+      final idx = _productionSessions.indexWhere((s) => s.id == sessionId);
+      if (idx >= 0) {
+        _productionSessions[idx] = updated;
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Update production session error: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> deleteProductionSession(String sessionId) async {
+    if (_selectedOrg == null) return;
+    try {
+      await _api.deleteProductionSession(_selectedOrg!.id, sessionId);
+      _productionSessions.removeWhere((s) => s.id == sessionId);
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Delete production session error: $e');
+      rethrow;
+    }
+  }
+
+  // ── Run Exports ───────────────────────────────────────────────────
+  Future<Map<String, dynamic>?> exportRunJson(String runId) async {
+    if (_selectedOrg == null) return null;
+    try {
+      return await _api.exportRunJson(_selectedOrg!.id, runId);
+    } catch (e) {
+      debugPrint('Export run JSON error: $e');
+      return null;
+    }
+  }
+
+  Future<List<int>?> exportRunXlsx(String runId) async {
+    if (_selectedOrg == null) return null;
+    try {
+      return await _api.exportRunXlsx(_selectedOrg!.id, runId);
+    } catch (e) {
+      debugPrint('Export run XLSX error: $e');
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> exportRunGantt(String runId) async {
+    if (_selectedOrg == null) return null;
+    try {
+      return await _api.exportRunGantt(_selectedOrg!.id, runId);
+    } catch (e) {
+      debugPrint('Export run Gantt error: $e');
+      return null;
+    }
+  }
+
+  // ── Problem Import ────────────────────────────────────────────────
+  Future<ImportOut?> importProblem({
+    required String name,
+    required double targetCycleTime,
+    required List<int> samFile,
+    List<int>? workstationsFile,
+    List<int>? workersFile,
+  }) async {
+    if (_selectedOrg == null) return null;
+    try {
+      return await _api.importProblem(
+        orgId: _selectedOrg!.id,
+        name: name,
+        targetCycleTime: targetCycleTime,
+        samFile: samFile,
+        workstationsFile: workstationsFile,
+        workersFile: workersFile,
+      );
+    } catch (e) {
+      debugPrint('Import problem error: $e');
+      rethrow;
+    }
+  }
+
+  // ── Organization Management (Super Admin) ─────────────────────────
+  Future<Organization?> createOrganization(String name, String country) async {
+    try {
+      final org = await _api.createOrganization(name, country);
+      _organizations.add(org);
+      notifyListeners();
+      return org;
+    } catch (e) {
+      debugPrint('Create organization error: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> deleteOrganization(String orgId, String confirmName) async {
+    try {
+      await _api.deleteOrganization(orgId, confirmName);
+      _organizations.removeWhere((o) => o.id == orgId);
+      if (_selectedOrg?.id == orgId) {
+        _selectedOrg = _organizations.isNotEmpty ? _organizations.first : null;
+      }
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Delete organization error: $e');
+      rethrow;
+    }
+  }
+
+  // ── Solvers ───────────────────────────────────────────────────────
+  Future<List<String>> getSolvers() async {
+    try {
+      return await _api.getSolvers();
+    } catch (e) {
+      debugPrint('Get solvers error: $e');
+      return [];
     }
   }
 

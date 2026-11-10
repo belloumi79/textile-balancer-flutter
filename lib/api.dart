@@ -266,6 +266,187 @@ class ApiClient {
     return [];
   }
 
+  Future<ProductionSession> createProductionSession(String orgId, ProductionSession session) async {
+    final resp = await http.post(
+      Uri.parse('$_renderBase/v1/orgs/$orgId/production/sessions'),
+      headers: _authHeaders,
+      body: jsonEncode(session.toJson()),
+    ).timeout(const Duration(seconds: 30));
+
+    if (resp.statusCode == 200 || resp.statusCode == 201) {
+      return ProductionSession.fromApi(jsonDecode(resp.body));
+    }
+    throw Exception('Failed to create session: ${resp.body}');
+  }
+
+  Future<ProductionSession> updateProductionSession(String orgId, String sessionId, Map<String, dynamic> updates) async {
+    final resp = await http.patch(
+      Uri.parse('$_renderBase/v1/orgs/$orgId/production/sessions/$sessionId'),
+      headers: _authHeaders,
+      body: jsonEncode(updates),
+    ).timeout(const Duration(seconds: 30));
+
+    if (resp.statusCode == 200) {
+      return ProductionSession.fromApi(jsonDecode(resp.body));
+    }
+    throw Exception('Failed to update session: ${resp.body}');
+  }
+
+  Future<void> deleteProductionSession(String orgId, String sessionId) async {
+    final resp = await http.delete(
+      Uri.parse('$_renderBase/v1/orgs/$orgId/production/sessions/$sessionId'),
+      headers: _authHeaders,
+    ).timeout(const Duration(seconds: 30));
+
+    if (resp.statusCode != 200 && resp.statusCode != 204) {
+      throw Exception('Failed to delete session: ${resp.body}');
+    }
+  }
+
+  // ── Workshop Plans CRUD ────────────────────────────────────────────
+  Future<WorkshopPlan> createWorkshopPlan(String orgId, WorkshopPlan plan) async {
+    final resp = await http.post(
+      Uri.parse('$_renderBase/v1/orgs/$orgId/workshop-plans'),
+      headers: _authHeaders,
+      body: jsonEncode(plan.toJson()),
+    ).timeout(const Duration(seconds: 30));
+
+    if (resp.statusCode == 200 || resp.statusCode == 201) {
+      return WorkshopPlan.fromApi(jsonDecode(resp.body));
+    }
+    throw Exception('Failed to create workshop plan: ${resp.body}');
+  }
+
+  Future<WorkshopPlan> updateWorkshopPlan(String orgId, String planId, Map<String, dynamic> updates) async {
+    final resp = await http.patch(
+      Uri.parse('$_renderBase/v1/orgs/$orgId/workshop-plans/$planId'),
+      headers: _authHeaders,
+      body: jsonEncode(updates),
+    ).timeout(const Duration(seconds: 30));
+
+    if (resp.statusCode == 200) {
+      return WorkshopPlan.fromApi(jsonDecode(resp.body));
+    }
+    throw Exception('Failed to update workshop plan: ${resp.body}');
+  }
+
+  Future<void> deleteWorkshopPlan(String orgId, String planId) async {
+    final resp = await http.delete(
+      Uri.parse('$_renderBase/v1/orgs/$orgId/workshop-plans/$planId'),
+      headers: _authHeaders,
+    ).timeout(const Duration(seconds: 30));
+
+    if (resp.statusCode != 200 && resp.statusCode != 204) {
+      throw Exception('Failed to delete workshop plan: ${resp.body}');
+    }
+  }
+
+  // ── Run Exports ────────────────────────────────────────────────────
+  Future<Map<String, dynamic>> exportRunJson(String orgId, String runId) async {
+    final resp = await http.get(
+      Uri.parse('$_renderBase/v1/orgs/$orgId/runs/$runId/export.json'),
+      headers: _authHeaders,
+    ).timeout(const Duration(seconds: 60));
+
+    if (resp.statusCode == 200) {
+      return jsonDecode(resp.body);
+    }
+    throw Exception('Failed to export run JSON: ${resp.body}');
+  }
+
+  Future<List<int>> exportRunXlsx(String orgId, String runId) async {
+    final resp = await http.get(
+      Uri.parse('$_renderBase/v1/orgs/$orgId/runs/$runId/export.xlsx'),
+      headers: _authHeaders,
+    ).timeout(const Duration(seconds: 60));
+
+    if (resp.statusCode == 200) {
+      return resp.bodyBytes;
+    }
+    throw Exception('Failed to export run XLSX: ${resp.body}');
+  }
+
+  Future<Map<String, dynamic>> exportRunGantt(String orgId, String runId) async {
+    final resp = await http.get(
+      Uri.parse('$_renderBase/v1/orgs/$orgId/runs/$runId/export.gantt.json'),
+      headers: _authHeaders,
+    ).timeout(const Duration(seconds: 60));
+
+    if (resp.statusCode == 200) {
+      return jsonDecode(resp.body);
+    }
+    throw Exception('Failed to export run Gantt: ${resp.body}');
+  }
+
+  // ── Problem Import ─────────────────────────────────────────────────
+  Future<ImportOut> importProblem({
+    required String orgId,
+    required String name,
+    required double targetCycleTime,
+    required List<int> samFile,
+    List<int>? workstationsFile,
+    List<int>? workersFile,
+  }) async {
+    var request = http.MultipartRequest('POST', Uri.parse('$_renderBase/v1/import/problem'));
+    request.headers.addAll(_authHeaders);
+    request.fields['name'] = name;
+    request.fields['target_cycle_time'] = targetCycleTime.toString();
+    request.files.add(http.MultipartFile.fromBytes('sam', samFile, filename: 'sam.csv'));
+    if (workstationsFile != null) {
+      request.files.add(http.MultipartFile.fromBytes('workstations', workstationsFile, filename: 'workstations.csv'));
+    }
+    if (workersFile != null) {
+      request.files.add(http.MultipartFile.fromBytes('workers', workersFile, filename: 'workers.csv'));
+    }
+
+    final streamed = await request.send().timeout(const Duration(seconds: 60));
+    final resp = await http.Response.fromStream(streamed);
+
+    if (resp.statusCode == 200 || resp.statusCode == 201) {
+      return ImportOut.fromApi(jsonDecode(resp.body));
+    }
+    throw Exception('Failed to import problem: ${resp.body}');
+  }
+
+  // ── Organization Management (Super Admin) ──────────────────────────
+  Future<Organization> createOrganization(String name, String country) async {
+    final resp = await http.post(
+      Uri.parse('$_renderBase/v1/orgs'),
+      headers: _authHeaders,
+      body: jsonEncode({'name': name, 'country': country}),
+    ).timeout(const Duration(seconds: 30));
+
+    if (resp.statusCode == 200 || resp.statusCode == 201) {
+      return Organization.fromApi(jsonDecode(resp.body));
+    }
+    throw Exception('Failed to create organization: ${resp.body}');
+  }
+
+  Future<void> deleteOrganization(String orgId, String confirmName) async {
+    final resp = await http.delete(
+      Uri.parse('$_renderBase/v1/orgs/$orgId'),
+      headers: _authHeaders,
+      body: jsonEncode({'confirm_name': confirmName}),
+    ).timeout(const Duration(seconds: 30));
+
+    if (resp.statusCode != 200 && resp.statusCode != 204) {
+      throw Exception('Failed to delete organization: ${resp.body}');
+    }
+  }
+
+  // ── Solvers ────────────────────────────────────────────────────────
+  Future<List<String>> getSolvers() async {
+    final resp = await http.get(
+      Uri.parse('$_renderBase/v1/solvers'),
+      headers: _authHeaders,
+    ).timeout(const Duration(seconds: 30));
+
+    if (resp.statusCode == 200) {
+      return (jsonDecode(resp.body) as List).cast<String>();
+    }
+    return [];
+  }
+
   void logout() async {
     await Supabase.instance.client.auth.signOut();
     _accessToken = null;

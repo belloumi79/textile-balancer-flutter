@@ -637,6 +637,17 @@ class WorkshopPlan {
         createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
         updatedAt: DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
       );
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'version': version,
+        'width_m': widthM,
+        'length_m': lengthM,
+        if (background != null) 'background': background,
+        if (elements != null) 'elements': elements,
+        if (settings != null) 'settings': settings,
+        if (machineCount != null) 'machine_count': machineCount,
+      };
 }
 
 class ProductionSession {
@@ -663,5 +674,26 @@ class ProductionSession {
         startTime: DateTime.tryParse(json['start_time'] ?? '') ?? DateTime.now(),
         endTime: json['end_time'] != null ? DateTime.tryParse(json['end_time']!) : null,
         status: json['status'] ?? '',
+      );
+
+  Map<String, dynamic> toJson() => {
+        'line_id': lineId,
+        'start_time': startTime.toIso8601String(),
+        if (endTime != null) 'end_time': endTime!.toIso8601String(),
+        'status': status,
+      };
+}
+
+// ── Import Result ──────────────────────────────────────────────────
+
+class ImportOut {
+  final String problemId;
+  final String lineId;
+
+  ImportOut({required this.problemId, required this.lineId});
+
+  factory ImportOut.fromApi(Map<String, dynamic> json) => ImportOut(
+        problemId: json['problem_id'] ?? '',
+        lineId: json['line_id'] ?? '',
       );
 }
